@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+import logo from '../images/logo.svg';
 import MessageBox from './MessageBox';
 import MessageInput from './MessageInput';
-import './App.css';
+import '../css/App.css';
 
 
 class Communicator extends Component {

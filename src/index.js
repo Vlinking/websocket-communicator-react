@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Communicator from './Communicator';
-import './index.css';
+import Communicator from './components/Communicator';
+import './css/index.css';
 
 ReactDOM.render(
   <Communicator />,
