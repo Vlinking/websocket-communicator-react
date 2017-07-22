@@ -16,7 +16,6 @@ class MessageInput extends Component {
   }
 
   handleSubmit(event) {
-    //console.log('We submitted ' + this.state.message);
     this.props.callbackFunction(this.state.message);
     event.preventDefault();
   }

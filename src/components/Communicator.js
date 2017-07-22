@@ -13,10 +13,15 @@ class Communicator extends Component {
     };
   }
 
+  componentDidMount() {
+    this.connection = new WebSocket('ws://localhost:8765');
+    this.connection.onmessage = evt => {
+      this.setState({messages: this.state.messages.concat([{"text": evt.data}])});
+    };
+  }
+
   handleInputCallback(message) {
-    //console.log('We received ' + message);
-    this.setState({messages: this.state.messages.concat([{"text": message}])});
-    //console.log(this.state.messages)
+    this.connection.send(message);
   }
 
   render() {
