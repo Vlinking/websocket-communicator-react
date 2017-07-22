@@ -28,17 +28,24 @@ class AnonymousUser:
     def send(self, sender, message):
         return self.connection.send("{0}: {1}".format(sender.username, message))
 
+    def disconnect(self):
+        return self.connection.close()
+
 
 async def consumer_handler(anon_user):
     global connected_users
     while True:
-        message = await anon_user.receive()
-        await asyncio.wait([user.send(anon_user, message) for user in connected_users if anon_user is not user])
+        try:
+            message = await anon_user.receive()
+            await asyncio.wait([user.send(anon_user, message) for user in connected_users if anon_user is not user])
+        except websockets.exceptions.ConnectionClosed:
+            anon_user.disconnect()
+            break
 
 
 async def register_handler(websocket, path):
     """
-    Send message to every client for now.
+    Register user, wait for messages, finally unregister.
     """
     global connected_users
     anon_user = AnonymousUser(websocket)
@@ -47,7 +54,6 @@ async def register_handler(websocket, path):
         await(consumer_handler(anon_user))
     finally:
         connected_users.remove(anon_user)
-
 
 
 if __name__ == "__main__":
