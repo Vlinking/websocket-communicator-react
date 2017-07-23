@@ -5,3 +5,9 @@ react:
   volumes:
     - .:/home/appuser/workdir
     - /home/appuser/workdir/node_modules
+python:
+  build: ./server
+  ports:
+    - '8765:8765'
+  volumes:
+    - .:/home/appuser/workdir
