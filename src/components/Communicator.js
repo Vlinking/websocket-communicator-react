@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import logo from '../images/logo.svg';
+import icon from '../images/icon.png';
 import MessageBox from './MessageBox';
 import MessageInput from './MessageInput';
 import '../css/App.css';
@@ -18,7 +19,7 @@ class Communicator extends Component {
   handleNotification(message) {
     if (this.state.notifications_supported && (this.state.notifications_permission === "granted")) {
       var notification = new Notification("Message", {
-        icon: '../images/icon.png',
+        icon: icon,
         body: message,
       });
     }
