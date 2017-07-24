@@ -9,15 +9,42 @@ class Communicator extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      messages: []
+      messages: [],
+      notifications_supported: true,
+      notifications_permission: ''
     };
+  }
+
+  handleNotification(message) {
+    if (this.state.notifications_supported && (this.state.notifications_permission === "granted")) {
+      var notification = new Notification("Message", {
+        icon: '../images/icon.png',
+        body: message,
+      });
+    }
   }
 
   componentDidMount() {
     this.connection = new WebSocket('ws://localhost:8765');
     this.connection.onmessage = evt => {
       this.setState({messages: this.state.messages.concat([{"text": evt.data}])});
+      this.handleNotification(evt.data);
     };
+    if (!Notification) {
+      this.setState({notifications_supported: false});
+      console.log("Your browser doesn't support desktop notifications.");
+    } else {
+        if (Notification.permission !== "granted") {
+            console.log("Permissions not granted");
+            Notification.requestPermission(permission => {
+                this.setState({notifications_permission: permission});
+                console.log("Notifications permissions level: " + permission);
+            });
+        } else {
+            this.setState({notifications_permission: "granted"});
+            console.log("Notifications permissions level granted from earlier.");
+        }
+    }
   }
 
   handleInputCallback(message) {
